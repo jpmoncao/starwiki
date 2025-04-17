@@ -1,4 +1,5 @@
-@import url(assets/fonts/starjedi/starjedi.css);
+@import url('assets/styles/starwars/header.css');   
+@import url('assets/fonts/starjedi/starjedi.css');
 @import "tailwindcss";
 
 @theme {
