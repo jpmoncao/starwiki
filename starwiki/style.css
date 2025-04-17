@@ -1,1 +1,6 @@
+@import url(assets/fonts/starjedi/starjedi.css);
 @import "tailwindcss";
+
+@theme {
+    --font-starjedi: StarJedi, sans-serif;
+}
