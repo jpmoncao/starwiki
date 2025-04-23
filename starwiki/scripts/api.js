@@ -1,12 +1,27 @@
-const API_URL = 'https://swapi.dev/api';
+import { requestApi } from './utils.js';
+
+const API_URL = 'https://swapi.info/api';
 
 export async function fetchPeople() {
     try {
-        const response = await fetch(API_URL + '/people');
-        const data = await response.json();
-        console.log(data);
-        return data;
+        return await requestApi(API_URL, '/people');
     } catch (error) {
-        
+        console.error(error);
+    }
+}
+
+export async function fetchFilms() {
+    try {
+        return await requestApi(API_URL, '/films');
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function fetchStarships() {
+    try {
+        return await requestApi(API_URL, '/starships');
+    } catch (error) {
+        console.error(error);
     }
 }
