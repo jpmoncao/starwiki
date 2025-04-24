@@ -52,8 +52,8 @@ export function isCacheExpired(key, maximumTime) {
 
 export function renderNavigator(actual, end) {
     const navigator = document.querySelector('#navigator');
+    navigator.innerHTML = '';
 
-    
     if (actual !== 1)
         navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual - 1}">Voltar</button>`;
 
@@ -76,11 +76,28 @@ export function renderNavigator(actual, end) {
 
 export function getPage() {
     const urlParams = new URLSearchParams(window.location.search);
-    return parseInt(urlParams.get('page'));
+    const page = parseInt(urlParams.get('page'));
+    return page ? page : 1;
 }
 
 export function alterPage(page) {
-  const urlParams = new URLSearchParams(window.location.search);
-  urlParams.set('page', page);
-  window.location.search = urlParams.toString();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', page);
+    window.location.search = urlParams.toString();
+}
+
+export function getPageState(limit = 0) {
+    let hasPagination = true
+    let newLimit = limit;
+
+    if (limit <= 0) {
+        newLimit = 5;
+        hasPagination = false;
+    }
+
+    const page = getPage();
+    const firstItem = (page - 1) * newLimit;
+    const lastItem = firstItem - 1 + newLimit;
+
+    return { page, newLimit, firstItem, lastItem, hasPagination };
 }

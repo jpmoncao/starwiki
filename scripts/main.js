@@ -1,79 +1,76 @@
 import { fetchPeople, fetchFilms, fetchStarships } from './api'
-import { renderNavigator, getPage } from './utils'
+import { renderNavigator, getPage, getPageState } from './utils'
 
 
 export async function renderPeople(limit = 0) {
-    const showMore = limit === 0;
-
-    if (showMore)
-        limit = 3;
+    const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
     const people = await fetchPeople();
-
     const peopleContainer = document.querySelector('#people-container');
     peopleContainer.innerHTML = '';
-    people.forEach((person, index) => {
-        if (index > limit) return;
+
+    for (let i = firstItem; i < lastItem; i++) {
+        if (i > people.length - 1)
+            break;
+
         peopleContainer.innerHTML += `
         <div class="flex flex-col justify-center border-2 border-yellow-500 w-full bg-zinc-300 p-2 rounded hover:scale-105 hover:shadow transition-all">
-            <h1>${person.name}</h1>
-            <p>${person.height} cm | ${person.mass} kg</p>
+            <h1>${people[i].name}</h1>
+            <p>${people[i].height} cm | ${people[i].mass} kg</p>
         </div>`;
-    });
+    }
 
-    if (showMore)
+    if (!hasPagination)
         peopleContainer.innerHTML += `<a href="/personagens" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
     else
-        renderNavigator(getPage(), 10);
+        renderNavigator(getPage(), Math.ceil(people.length / 10));
 }
 
 export async function renderFilms(limit = 0) {
-    const showMore = limit === 0;
-
-    if (showMore)
-        limit = 3;
+    const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
     const films = await fetchFilms();
-    
     const filmsContainer = document.querySelector('#films-container');
     filmsContainer.innerHTML = '';
-    films.forEach((film, index) => {
-        if (index > limit) return;
+
+    for (let i = firstItem; i < lastItem; i++) {
+        if (i > films.length - 1)
+            break;
+
         filmsContainer.innerHTML += `
         <div class="flex flex-col justify-center border-2 border-yellow-500  w-full bg-zinc-300 p-2 rounded hover:scale-105 hover:shadow transition-all">
-            <h1>${film.title}</h1>
-            <p>Episódio ${film.episode_id}</p>
-            <p>${film.release_date}</p>
+            <h1>${films[i].title}</h1>
+            <p>Episódio ${films[i].episode_id}</p>
+            <p>${films[i].release_date}</p>
         </div>`;
-    });
+    }
 
-    if (showMore)
+    if (!hasPagination)
         filmsContainer.innerHTML += `<a href="/filmes" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
     else
-        renderNavigator(getPage(), 10);
+        renderNavigator(getPage(), Math.ceil(films.length / 10));
 }
 
 export async function renderStarships(limit = 0) {
-    const showMore = limit === 0;
-
-    if (showMore)
-        limit = 3;
+    const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
     const starships = await fetchStarships();
-    
     const starshipsContainer = document.querySelector('#starships-container');
     starshipsContainer.innerHTML = '';
-    starships.forEach((starship, index) => {
-        if (index > limit) return;
+
+    for (let i = firstItem; i < lastItem; i++) {
+        if (i > starships.length - 1)
+            break;
+
         starshipsContainer.innerHTML += `
         <div class="flex flex-col justify-center border-2 border-yellow-500  w-full bg-zinc-300 p-2 rounded hover:scale-105 hover:shadow transition-all">
-            <h1>${starship.name}</h1>
-            <p>${starship.model} | ${starship.starship_class}</p>
+            <h1>${starships[i].name}</h1>
+            <p>${starships[i].model} | ${starships[i].starship_class}</p>
         </div>`;
-    });
-    
-    if (showMore)
+    }
+
+    if (!hasPagination)
         starshipsContainer.innerHTML += `<a href="/naves" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
     else
-        renderNavigator(getPage(), 10);
+        renderNavigator(getPage(), Math.ceil(starships.length / 10));
 }

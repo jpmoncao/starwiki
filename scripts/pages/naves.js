@@ -1,3 +1,3 @@
 import { renderStarships } from "../main";
 
-renderStarships(11);
+renderStarships(10);

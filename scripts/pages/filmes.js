@@ -1,3 +1,3 @@
 import { renderFilms } from "../main";
 
-renderFilms(11);
+renderFilms(10);
