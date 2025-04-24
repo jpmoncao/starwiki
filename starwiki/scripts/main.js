@@ -1,15 +1,14 @@
-import { data } from 'autoprefixer';
 import { fetchPeople, fetchFilms, fetchStarships } from './api'
 
 export async function renderPeople() {
     const people = await fetchPeople();
-    console.log(people);
+
     const peopleContainer = document.querySelector('#people-container');
     peopleContainer.innerHTML = '';
     people.forEach((person, index) => {
         if (index > 3) return;
         peopleContainer.innerHTML += `
-        <div class="flex flex-col justify-center border-2 border-yellow-500  w-full bg-zinc-300 p-2 rounded hover:scale-105 hover:shadow transition-all">
+        <div class="flex flex-col justify-center border-2 border-yellow-500 w-full bg-zinc-300 p-2 rounded hover:scale-105 hover:shadow transition-all">
             <h1>${person.name}</h1>
             <p>${person.height} cm | ${person.mass} kg</p>
         </div>`;
@@ -19,7 +18,7 @@ export async function renderPeople() {
 
 export async function renderFilms() {
     const films = await fetchFilms();
-    console.log(films);
+    
     const filmsContainer = document.querySelector('#films-container');
     filmsContainer.innerHTML = '';
     films.forEach((film, index) => {
@@ -36,7 +35,7 @@ export async function renderFilms() {
 
 export async function renderStarships() {
     const starships = await fetchStarships();
-    console.log(starships);
+    
     const starshipsContainer = document.querySelector('#starships-container');
     starshipsContainer.innerHTML = '';
     starships.forEach((starship, index) => {
