@@ -1,3 +1,3 @@
 import { renderPeople } from "../main";
 
-renderPeople();
+renderPeople(10);
