@@ -1,7 +1,13 @@
 import { fetchPeople, fetchFilms, fetchStarships } from './api'
+import { renderNavigator, getPage } from './utils'
+
 
 export async function renderPeople(limit = 0) {
     const showMore = limit === 0;
+
+    if (showMore)
+        limit = 3;
+
     const people = await fetchPeople();
 
     const peopleContainer = document.querySelector('#people-container');
@@ -16,11 +22,17 @@ export async function renderPeople(limit = 0) {
     });
 
     if (showMore)
-        peopleContainer.innerHTML += `<a href="/personagens" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`
+        peopleContainer.innerHTML += `<a href="/personagens" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
+    else
+        renderNavigator(getPage(), 10);
 }
 
 export async function renderFilms(limit = 0) {
     const showMore = limit === 0;
+
+    if (showMore)
+        limit = 3;
+
     const films = await fetchFilms();
     
     const filmsContainer = document.querySelector('#films-container');
@@ -36,11 +48,17 @@ export async function renderFilms(limit = 0) {
     });
 
     if (showMore)
-        filmsContainer.innerHTML += `<a href="/filmes" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`
+        filmsContainer.innerHTML += `<a href="/filmes" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
+    else
+        renderNavigator(getPage(), 10);
 }
 
 export async function renderStarships(limit = 0) {
     const showMore = limit === 0;
+
+    if (showMore)
+        limit = 3;
+
     const starships = await fetchStarships();
     
     const starshipsContainer = document.querySelector('#starships-container');
@@ -55,5 +73,7 @@ export async function renderStarships(limit = 0) {
     });
     
     if (showMore)
-        starshipsContainer.innerHTML += `<a href="/naves" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`
+        starshipsContainer.innerHTML += `<a href="/naves" class="h-16 w-full bg-zinc-600 rounded flex justify-center items-center text-yellow-50 font-bold hover:scale-105 hover:shadow transition-all">Ver mais +</a>`;
+    else
+        renderNavigator(getPage(), 10);
 }

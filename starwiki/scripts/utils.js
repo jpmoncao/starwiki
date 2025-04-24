@@ -1,16 +1,16 @@
 export async function requestApi(baseURL, endpoint) {
     try {
         const CACHE_KEY = 'starwiki__data' + endpoint;
-    
+
         if (!isCacheExpired(CACHE_KEY, 5 * 60 * 1000))
             return getCache(CACHE_KEY).data;
-            
+
         console.log(endpoint + ' requested!')
 
         const response = await fetch(baseURL + endpoint);
         const data = await response.json();
 
-        saveCache(CACHE_KEY, JSON.stringify({data, timestamp: Date.now()}))
+        saveCache(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }))
 
         return data;
     } catch (error) {
@@ -40,7 +40,7 @@ export function isCached(key) {
 export function isCacheExpired(key, maximumTime) {
     if (!isCached(key))
         return true
-    
+
     const data = getCache(key);
     if (!data.timestamp)
         return true;
@@ -48,4 +48,39 @@ export function isCacheExpired(key, maximumTime) {
     const cacheMadeTimestamp = Date.now() - new Date(data.timestamp).getTime();
 
     return cacheMadeTimestamp > maximumTime;
+}
+
+export function renderNavigator(actual, end) {
+    const navigator = document.querySelector('#navigator');
+
+    
+    if (actual !== 1)
+        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual - 1}">Voltar</button>`;
+
+    for (let i = 1; i <= end; i++)
+        if (i === actual)
+            navigator.innerHTML += `<button class="bg-yellow-300 text-zinc-900 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all">${i}</button>`;
+        else
+            navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all" data-page="${i}">${i}</button>`;
+
+    if (actual !== end)
+        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual + 1}">Próximo</button>`;
+
+    const buttons = navigator.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            alterPage(e.target.dataset.page);
+        });
+    });
+}
+
+export function getPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return parseInt(urlParams.get('page'));
+}
+
+export function alterPage(page) {
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set('page', page);
+  window.location.search = urlParams.toString();
 }
