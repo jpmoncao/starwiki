@@ -5,9 +5,11 @@ export async function requestApi(baseURL, endpoint) {
         if (!isCacheExpired(CACHE_KEY, 5 * 60 * 1000))
             return getCache(CACHE_KEY).data;
 
-        console.log(endpoint + ' requested!')
-
         const response = await fetch(baseURL + endpoint);
+
+        if (!response.ok)
+            throw new Error('Falha ao requisitar o endpoint "'+endpoint+'"!');
+
         const data = await response.json();
 
         saveCache(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }))
@@ -55,7 +57,7 @@ export function renderNavigator(actual, end) {
     navigator.innerHTML = '';
 
     if (actual !== 1)
-        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual - 1}">Voltar</button>`;
+        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual - 1}">Voltar</button>`;
 
     for (let i = 1; i <= end; i++)
         if (i === actual)
@@ -64,7 +66,7 @@ export function renderNavigator(actual, end) {
             navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all" data-page="${i}">${i}</button>`;
 
     if (actual !== end)
-        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 aspect-square rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual + 1}">Próximo</button>`;
+        navigator.innerHTML += `<button class="bg-zinc-900 text-yellow-300 h-8 rounded cursor-pointer hover:scale-105 transition-all px-2" data-page="${actual + 1}">Próximo</button>`;
 
     const buttons = navigator.querySelectorAll('button');
     buttons.forEach(button => {
@@ -100,4 +102,19 @@ export function getPageState(limit = 0) {
     const lastItem = firstItem - 1 + newLimit;
 
     return { page, newLimit, firstItem, lastItem, hasPagination };
+}
+
+
+export function getSearchTerm() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search');
+    return search ? search : '';
+}
+
+export function alterSearchTerm(search) {
+    const url = new URL(window.location);
+
+    url.searchParams.set('search', search);
+
+    window.history.replaceState({}, '', url);
 }

@@ -2,10 +2,15 @@ import { fetchPeople, fetchFilms, fetchStarships } from './api'
 import { renderNavigator, getPage, getPageState } from './utils'
 
 
-export async function renderPeople(limit = 0) {
+export async function renderPeople(limit = 0, searchTerm = '') {
     const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
-    const people = await fetchPeople();
+    const allPeople = await fetchPeople();
+
+    const people = allPeople.filter(person =>
+        person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const peopleContainer = document.querySelector('#people-container');
     peopleContainer.innerHTML = '';
 
@@ -26,10 +31,15 @@ export async function renderPeople(limit = 0) {
         renderNavigator(getPage(), Math.ceil(people.length / 10));
 }
 
-export async function renderFilms(limit = 0) {
+export async function renderFilms(limit = 0, searchTerm = '') {
     const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
-    const films = await fetchFilms();
+    const allFilms = await fetchFilms();
+
+    const films = allFilms.filter(film =>
+        film.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const filmsContainer = document.querySelector('#films-container');
     filmsContainer.innerHTML = '';
 
@@ -51,10 +61,15 @@ export async function renderFilms(limit = 0) {
         renderNavigator(getPage(), Math.ceil(films.length / 10));
 }
 
-export async function renderStarships(limit = 0) {
+export async function renderStarships(limit = 0, searchTerm = '') {
     const { firstItem, lastItem, hasPagination } = getPageState(limit);
 
-    const starships = await fetchStarships();
+    const allStarships = await fetchStarships();
+
+    const starships = allStarships.filter(starship =>
+        starship.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const starshipsContainer = document.querySelector('#starships-container');
     starshipsContainer.innerHTML = '';
 
